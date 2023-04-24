@@ -43,7 +43,7 @@ process getParams {
 process makeReport {
     label "wfqc"
     input:
-        val cc
+        val plots_html
         path "QC-repport/report.data"
         path "versions/*"
         path "params.json"
@@ -56,7 +56,7 @@ process makeReport {
         --versions versions \
         --params params.json \
         --metadata QC-repport/report.data \
-        --qc ${cc.join()}
+        --qc ${plots_html.join()}
     """
 }
 

@@ -1,17 +1,11 @@
 """Create workflow report."""
 import json
-
-from ezcharts.components import fastcat
 from ezcharts.components.reports import labs
-from ezcharts.layout.snippets import Tabs, Stats
+from ezcharts.layout.snippets import Tabs
 from ezcharts.layout.snippets.table import DataTable
-from dominate import document
-from dominate.util import raw
-from dominate.tags import div, figure, iframe
 import pandas as pd
-
-from .util import get_named_logger, wf_parser  # noqa: ABS101
-from .filter_metadata import check_metadata
+from .util import get_named_logger, wf_parser 
+from .filter_metadata import check_metadata, add_qc
 
 def main(args):
     """Run the entry point."""
@@ -20,24 +14,22 @@ def main(args):
         "Workflow QC report", "wf-QC",
         args.params, args.versions)
 
-    sample_details = check_metadata(args.metadata)
-    
     with report.add_section("Metadata", "Metadata"):
         tabs = Tabs()
-        with tabs.add_tab("Sequencing"):
-            df = pd.DataFrame.from_dict(sample_details, orient="index", columns=["Value"])
+        with tabs.add_tab("Run statistics"):
+            run_statistics = check_metadata(args.metadata, 'Run statistics')
+            df = pd.DataFrame.from_dict(run_statistics, orient="index", columns=["Value"])
+            df.index.name = "Key"
+            DataTable.from_pandas(df)
+
+        with tabs.add_tab("Device and software"):
+            device_info = check_metadata(args.metadata, "Device and software")
+            df = pd.DataFrame.from_dict(device_info, orient="index", columns=["Value"])
             df.index.name = "Key"
             DataTable.from_pandas(df)
 
     with report.add_section("QC report", "QC report"):
-        chars_to_remove = [",", "[", "]"]
-        for filename in args.qc: 
-            fig = ''.join([char for char in filename if char not in chars_to_remove])
-            
-            with open(fig, 'r', encoding="UTF-8") as f:
-                file_contents = f.read()
-            with figure():
-                raw(file_contents)
+        add_qc(args.qc)
 
     report.write(args.report)
     logger.info(f"Report written to {args.report}.")
