@@ -26,7 +26,6 @@ process getVersions {
     """
 }
 
-
 process getParams {
     label "wfqc"
     cpus 1
@@ -61,30 +60,32 @@ process makeReport {
 }
 
 process toulligqc {
+    //debug true 
     label "wfqc"
     input:
         path seq_summary
-        path seq_telometry
+        path seq_telemetry
+        path fast5
+        path seq_1dsqr
+        val report_name
     output:
-        path "QC-repport/report.data", emit: report_data
-        path "QC-repport/images/*.html", emit: plots_html
-        path "QC-repport/images/plotly.min.js", emit: plotly_js
+        path "$report_name/report.data", emit: report_data
+        path "$report_name/images/*.html", emit: plots_html
+        path "$report_name/images/plotly.min.js", emit: plotly_js
     script:
-        String report_name = "QC-repport"
+        //String report_name = "QC-repport"
+        def telemetry_arg = seq_telemetry.name != 'No_telemetry' ? "--telemetry-source $seq_telometry" : ""
+        def fast5_arg = fast5.name != 'No_fast5' ? "--fast5-source $fast5" : ""
+        def seq_1dsqr_arg = seq_1dsqr.name != 'No_seq_1dsqr' ? "--sequencing-summary-1dsqr-source $seq_1dsqr" : ""
     """
     toulligqc -a ${seq_summary} \
-    --telemetry-source  ${seq_telometry} \
+    $telemetry_arg  $fast5_arg  $seq_1dsqr_arg \
     -n $report_name \
     --force 
     """
-}
+} 
 
-// See https://github.com/nextflow-io/nextflow/issues/1636. This is the only way to
-// publish files from a workflow whilst decoupling the publish from the process steps.
-// The process takes a tuple containing the filename and the name of a sub-directory to
-// put the file into. If the latter is `null`, puts it into the top-level directory.
 process output {
-    // publish inputs to output directory
     label "wfqc"
     publishDir (
         params.out_dir,
@@ -99,18 +100,19 @@ process output {
     """
 }
 
-// Creates a new directory named after the sample alias and moves the fastcat results into it.
-// workflow module
 workflow pipeline {
     take:
         seq_summary
-        seq_telometry
+        seq_telemetry
+        fast5
+        seq_1dsqr
+        report_name
     main:
         software_versions = getVersions()
 
         workflow_params = getParams()
 
-        toulligqc(seq_summary, seq_telometry)
+        toulligqc(seq_summary, seq_telemetry, fast5, seq_1dsqr, report_name)
 
         plotly_js = toulligqc.out.plotly_js
 
@@ -123,10 +125,8 @@ workflow pipeline {
         plotly_js
         report
         workflow_params
-        // TODO: use something more useful as telemetry
         telemetry = workflow_params
 }
-
 
 // entrypoint workflow
 WorkflowMain.initialise(workflow, params, log)
@@ -136,10 +136,13 @@ workflow {
         Pinguscript.ping_post(workflow, "start", "none", params.out_dir, params)
     }
 
-    seq_summary = file(params.sequencing_summary, type: "file")
-    seq_telometry = file(params.sequencing_telometry, type: "file")
+    seq_summary = file(params.sequencing_summary_source, type: "file")
+    seq_telemetry = params.telemetry_source != null ? file(params.telemetry_source, type: "file") : file("No_telemetry", type: "file")
+    fast5 = params.fast5_source != null ? file(params.fast5_source, type: "file") : file("No_fast5", type: "file")
+    seq_1dsqr = params.seq_1dsqr != null ? file(params.seq_1dsqr, type: "file") : file("No_seq_1dsqr", type: "file")
+    report_name = params.report_name
 
-    pipeline(seq_summary, seq_telometry)
+    pipeline(seq_summary, seq_telemetry, fast5 , seq_1dsqr, report_name)
     pipeline.out.report.concat(pipeline.out.workflow_params).concat(pipeline.out.plotly_js)
     | map { [it, null] }
 

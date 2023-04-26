@@ -1,5 +1,6 @@
 from dominate.tags import figure, div, section, h2
 from dominate.util import raw
+from collections import defaultdict
 import datetime
 
 #str(datetime.timedelta(seconds = sec))
@@ -27,8 +28,12 @@ metadata = {'Run statistics':[
     }
 
 
+def defaultCount():
+	return 'Unknown'
+
+
 def check_metadata(data, info, metadata=metadata):
-    dico = dict()
+    dico = defaultdict(defaultCount)
     sample_details = {}
     with open(data,'r') as f:
         for line in f:
