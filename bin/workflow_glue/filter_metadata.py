@@ -79,8 +79,6 @@ def clean_name(name):
 
 
 def resize_figure(rawText):
-    # rawText.replace('height":562','height":500').replace('width":1000', 'width":850')
-    # rawText.replace('height:562','height:500').replace('width:1000', 'width:850')
     rawText.replace('562','500').replace('1000', '850')
     return rawText
 
@@ -121,8 +119,9 @@ def div_summary(titles):
     position: -webkit-sticky;
     position: sticky;
     top: 80px;
+    font-size: 0.9em;
     margin: 0.5em 0 0 0.5em;
-    width: calc(366px - 0.5em);
+    width: calc(250px - 0.01em);
     }
 
     .qc-toc {
@@ -187,4 +186,4 @@ def add_qc(args):
                     html_contents = html.read()
                 with figure(style="float: right"):
                     with section(id=str('M'+str(i))):
-                        raw(html_contents.replace('562','500').replace('1000', '850'))
+                        raw(html_contents)
