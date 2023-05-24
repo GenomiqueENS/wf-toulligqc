@@ -21,13 +21,13 @@
                 },
                 "telemetry_source": {
                     "type": "string",
-                    "default": "path",
+                    "format": "path",
                     "description": "Basecaller telemetry file source.",
                     "help_text": ""
                 },
                 "fast5_source": {
                     "type": "string",
-                    "default": "path",
+                    "format": "path",
                     "description": "Fast5 file source (necessary if no telemetry file).",
                     "help_text": "Necessary if no telemetry file"
                 }
