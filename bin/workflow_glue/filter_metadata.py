@@ -201,10 +201,10 @@ def div_summary(titles):
 def add_qc(args):
     figs = sort_figures(args)
     titles = [v[1] for v in figs.values()]
-    with div(id = 'ma_division', style="display: flex"):
+    with div(style="display: flex"):
         with div(style="flex: 1"):
             raw(div_summary(titles))
-        with div(style="flex: 1"):
+        with div(style="flex: 4; overflow: auto"):
             for i,f in enumerate(figs.values()):
                 with open(f[0], 'r', encoding="UTF-8") as html:
                     html_contents = html.read()

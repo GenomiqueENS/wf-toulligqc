@@ -3,6 +3,7 @@ import json
 from ezcharts.components.reports import labs
 from ezcharts.layout.snippets import Tabs
 from ezcharts.layout.snippets.table import DataTable
+from dominate.tags import div
 import pandas as pd
 from .util import get_named_logger, wf_parser 
 from .filter_metadata import check_metadata, add_qc
@@ -35,7 +36,8 @@ def main(args):
             DataTable.from_pandas(df)
 
     with report.add_section("QC report", "QC report"):
-        add_qc(args.qc)
+        #with div(style="overflow: auto; max-width: 100%"):
+                add_qc(args.qc)
 
     report.write(args.report)
     logger.info(f"Report written to {args.report}.")
