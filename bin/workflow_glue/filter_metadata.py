@@ -1,21 +1,24 @@
 from dominate.tags import figure, div, section, h2
 from dominate.util import raw
+import locale
 from collections import defaultdict
 import datetime
 
 #str(datetime.timedelta(seconds = sec))
 
-metadata = {'Run statistics':[
+metadata = {'Overall statistics':[
         'toulligqc.info.report.name',
         'sequencing.telemetry.extractor.sample.id',
+        'basecaller.sequencing.summary.1d.extractor.yield',
+        'basecaller.sequencing.summary.1d.extractor.n50',
+        'basecaller.sequencing.summary.1d.extractor.l50',
+    ],
+    'Run metadata':[
         'sequencing.telemetry.extractor.run.id',
         'sequencing.telemetry.extractor.exp.start.time',
         'sequencing.telemetry.extractor.flowcell.version',
         'sequencing.telemetry.extractor.kit.version',
         'sequencing.telemetry.extractor.barcode.kits.version',
-        'basecaller.sequencing.summary.1d.extractor.yield',
-        'basecaller.sequencing.summary.1d.extractor.n50',
-        'basecaller.sequencing.summary.1d.extractor.l50',
         'basecaller.sequencing.summary.1d.extractor.run.time'
     ],
     'Device and software': [
@@ -32,6 +35,21 @@ def defaultCount():
 	return 'Unknown'
 
 
+def _format_int(i):
+    return '{:,d}'.format(i)
+
+
+def _format_int_with_prefix(i):
+    for x in ((12, 'T'), (9, 'G'), (6, 'M'), (3, 'K')):
+        if i / 10 ** x[0] > 1:
+            return '{:.2f}{}'.format(float(i) / float(10 ** x[0]), x[1])
+    return i
+
+
+def _format_run_time(seconds):
+    return '%dh%02dm%02ds' % (seconds // 3600, (seconds % 3600) // 60, seconds % 60)
+
+
 def check_metadata(data, info, metadata=metadata):
     dico = defaultdict(defaultCount)
     sample_details = {}
@@ -45,6 +63,12 @@ def check_metadata(data, info, metadata=metadata):
         if len(val) == 0:
             sample_details[key] = 'Unknown'
         else :
+            if '50' in key:
+                val = _format_int(int(val))
+            if 'yield' in key:
+                val = _format_int_with_prefix(int(val))
+            if 'run time' in key:
+                val = _format_run_time(locale.atof(val))
             sample_details[key] = val
     return sample_details
 

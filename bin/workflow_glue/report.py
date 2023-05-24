@@ -16,8 +16,14 @@ def main(args):
 
     with report.add_section("Metadata", "Metadata"):
         tabs = Tabs()
-        with tabs.add_tab("Run statistics"):
-            run_statistics = check_metadata(args.metadata, 'Run statistics')
+        with tabs.add_tab("Overall statistics"):
+            run_statistics = check_metadata(args.metadata, 'Overall statistics')
+            df = pd.DataFrame.from_dict(run_statistics, orient="index", columns=["Value"])
+            df.index.name = "Key"
+            DataTable.from_pandas(df)
+
+        with tabs.add_tab("Run metadata"):
+            run_statistics = check_metadata(args.metadata, 'Run metadata')
             df = pd.DataFrame.from_dict(run_statistics, orient="index", columns=["Value"])
             df.index.name = "Key"
             DataTable.from_pandas(df)

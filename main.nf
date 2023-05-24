@@ -73,8 +73,7 @@ process toulligqc {
         path "$report_name/images/*.html", emit: plots_html
         path "$report_name/images/plotly.min.js", emit: plotly_js
     script:
-        //String report_name = "QC-repport"
-        def telemetry_arg = seq_telemetry.name != 'No_telemetry' ? "--telemetry-source $seq_telometry" : ""
+        def telemetry_arg = seq_telemetry.name != 'No_telemetry' ? "--telemetry-source $seq_telemetry" : ""
         def fast5_arg = fast5.name != 'No_fast5' ? "--fast5-source $fast5" : ""
         def seq_1dsqr_arg = seq_1dsqr.name != 'No_seq_1dsqr' ? "--sequencing-summary-1dsqr-source $seq_1dsqr" : ""
     """
