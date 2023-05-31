@@ -77,12 +77,12 @@ process toulligqc {
         path "$report_name/images/*.html", emit: plots_html
         path "$report_name/images/plotly.min.js", emit: plotly_js
     script:
-        def summary_pass_arg = summary_pass.name != 'null' ? "--sequencing-summary-source $summary_pass" : ""
-        def summary_fail_arg = summary_fail.name != 'null' ? "--sequencing-summary-source $summary_fail" : ""
-        def telemetry_arg = seq_telemetry.name != 'No_telemetry' ? "--telemetry-source $seq_telemetry" : ""
-        def fast5_arg = fast5.name != 'No_fast5' ? "--fast5-source $fast5" : ""
-        def seq_1dsqr_arg = seq_1dsqr.name != 'No_seq_1dsqr' ? "--sequencing-summary-1dsqr-source $seq_1dsqr" : ""
-        def barcodes_list = barcodes != 'No_barcodes' ? "--barcodes $barcodes" : ""
+        def summary_pass_arg = summary_pass.name != 'no_barcoding_pass' ? "--sequencing-summary-source $summary_pass" : ""
+        def summary_fail_arg = summary_fail.name != 'no_barcoding_fail' ? "--sequencing-summary-source $summary_fail" : ""
+        def telemetry_arg = seq_telemetry.name != 'no_telemetry' ? "--telemetry-source $seq_telemetry" : ""
+        def fast5_arg = fast5.name != 'no_fast5' ? "--fast5-source $fast5" : ""
+        def seq_1dsqr_arg = seq_1dsqr.name != 'no_seq_1dsqr' ? "--sequencing-summary-1dsqr-source $seq_1dsqr" : ""
+        def barcodes_list = barcodes != 'no_barcodes' ? "--barcodes $barcodes" : ""
         def barcoding = barcoding != 'false' ? "--barcoding" : ""
     """
     toulligqc --sequencing-summary-source ${seq_summary} \
@@ -150,12 +150,12 @@ workflow {
     }
 
     seq_summary = file(params.sequencing_summary_source, type: "file")
-    summary_pass = params.barcoding_summary_pass != null ? file(params.barcoding_summary_pass, type: "file") : file("null", type: "file")
-    summary_fail = params.barcoding_summary_fail != null ? file(params.barcoding_summary_fail, type: "file") : file("null", type: "file")
-    seq_telemetry = params.telemetry_source != null ? file(params.telemetry_source, type: "file") : file("No_telemetry", type: "file")
-    fast5 = params.fast5_source != null ? file(params.fast5_source, type: "file") : file("No_fast5", type: "file")
-    seq_1dsqr = params.seq_1dsqr != null ? file(params.seq_1dsqr, type: "file") : file("No_seq_1dsqr", type: "file")
-    barcodes = params.barcodes != null ? params.barcodes : "No_barcodes"
+    summary_pass = params.barcoding_summary_pass != null ? file(params.barcoding_summary_pass, type: "file") : file("no_barcoding_pass", type: "file")
+    summary_fail = params.barcoding_summary_fail != null ? file(params.barcoding_summary_fail, type: "file") : file("no_barcoding_fail", type: "file")
+    seq_telemetry = params.telemetry_source != null ? file(params.telemetry_source, type: "file") : file("no_telemetry", type: "file")
+    fast5 = params.fast5_source != null ? file(params.fast5_source, type: "file") : file("no_fast5", type: "file")
+    seq_1dsqr = params.seq_1dsqr != null ? file(params.seq_1dsqr, type: "file") : file("no_seq_1dsqr", type: "file")
+    barcodes = params.barcodes != null ? params.barcodes : "no_barcodes"
     report_name = params.report_name
     barcoding = params.barcoding
 
