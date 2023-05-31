@@ -16,13 +16,25 @@
                 "sequencing_summary_source": {
                     "type": "string",
                     "format": "path",
-                    "description": "Basecaller sequencing summary source.",
+                    "description": "Basecaller sequencing summary source, can be compressed with gzip (.gz) or bzip2 (.bz2)",
+                    "help_text": ""
+                },
+                "barcoding_summary_pass": {
+                    "type": "string",
+                    "format": "path",
+                    "description": "Basecaller barcoding summary source of passed reads, can be compressed with gzip (.gz) or bzip2 (.bz2).",
+                    "help_text": ""
+                },
+                "barcoding_summary_fail": {
+                    "type": "string",
+                    "format": "path",
+                    "description": "Basecaller barcoding summary source of failed reads, can be compressed with gzip (.gz) or bzip2 (.bz2)",
                     "help_text": ""
                 },
                 "telemetry_source": {
                     "type": "string",
                     "format": "path",
-                    "description": "Basecaller telemetry file source.",
+                    "description": "Basecaller telemetry file source, can be compressed with gzip (.gz) or bzip2 (.bz2)",
                     "help_text": ""
                 },
                 "fast5_source": {
@@ -30,6 +42,16 @@
                     "format": "path",
                     "description": "Fast5 file source (necessary if no telemetry file).",
                     "help_text": "Necessary if no telemetry file"
+                },
+                "barcoding": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Option for barcode usage."
+                    },
+                "barcodes": {
+                    "type": "string",
+                    "format": "name",
+                    "description": "Coma separated barcode list (e.g. BC05,RB09,NB01,barcode10)"
                 }
             },
             "required": [

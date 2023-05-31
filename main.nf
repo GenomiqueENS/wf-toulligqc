@@ -64,21 +64,31 @@ process toulligqc {
     label "wfqc"
     input:
         path seq_summary
+        path summary_pass
+        path summary_fail
         path seq_telemetry
         path fast5
         path seq_1dsqr
         val report_name
+        val barcodes
+        val barcoding
     output:
         path "$report_name/report.data", emit: report_data
         path "$report_name/images/*.html", emit: plots_html
         path "$report_name/images/plotly.min.js", emit: plotly_js
     script:
+        def summary_pass_arg = summary_pass.name != 'null' ? "--sequencing-summary-source $summary_pass" : ""
+        def summary_fail_arg = summary_fail.name != 'null' ? "--sequencing-summary-source $summary_fail" : ""
         def telemetry_arg = seq_telemetry.name != 'No_telemetry' ? "--telemetry-source $seq_telemetry" : ""
         def fast5_arg = fast5.name != 'No_fast5' ? "--fast5-source $fast5" : ""
         def seq_1dsqr_arg = seq_1dsqr.name != 'No_seq_1dsqr' ? "--sequencing-summary-1dsqr-source $seq_1dsqr" : ""
+        def barcodes_list = barcodes != 'No_barcodes' ? "--barcodes $barcodes" : ""
+        def barcoding = barcoding != 'false' ? "--barcoding" : ""
     """
-    toulligqc -a ${seq_summary} \
+    toulligqc --sequencing-summary-source ${seq_summary} \
+    $summary_pass_arg  $summary_fail_arg \
     $telemetry_arg  $fast5_arg  $seq_1dsqr_arg \
+    $barcoding  $barcodes_list \
     -n $report_name \
     --force 
     """
@@ -102,16 +112,20 @@ process output {
 workflow pipeline {
     take:
         seq_summary
+        summary_pass
+        summary_fail
         seq_telemetry
         fast5
         seq_1dsqr
         report_name
+        barcodes
+        barcoding
     main:
         software_versions = getVersions()
 
         workflow_params = getParams()
 
-        toulligqc(seq_summary, seq_telemetry, fast5, seq_1dsqr, report_name)
+        toulligqc(seq_summary, summary_pass, summary_fail, seq_telemetry, fast5, seq_1dsqr, report_name, barcodes, barcoding)
 
         plotly_js = toulligqc.out.plotly_js
 
@@ -136,12 +150,16 @@ workflow {
     }
 
     seq_summary = file(params.sequencing_summary_source, type: "file")
+    summary_pass = params.barcoding_summary_pass != null ? file(params.barcoding_summary_pass, type: "file") : file("null", type: "file")
+    summary_fail = params.barcoding_summary_fail != null ? file(params.barcoding_summary_fail, type: "file") : file("null", type: "file")
     seq_telemetry = params.telemetry_source != null ? file(params.telemetry_source, type: "file") : file("No_telemetry", type: "file")
     fast5 = params.fast5_source != null ? file(params.fast5_source, type: "file") : file("No_fast5", type: "file")
     seq_1dsqr = params.seq_1dsqr != null ? file(params.seq_1dsqr, type: "file") : file("No_seq_1dsqr", type: "file")
+    barcodes = params.barcodes != null ? params.barcodes : "No_barcodes"
     report_name = params.report_name
+    barcoding = params.barcoding
 
-    pipeline(seq_summary, seq_telemetry, fast5 , seq_1dsqr, report_name)
+    pipeline(seq_summary, summary_pass, summary_fail, seq_telemetry, fast5 , seq_1dsqr, report_name, barcodes, barcoding)
     pipeline.out.report.concat(pipeline.out.workflow_params).concat(pipeline.out.plotly_js)
     | map { [it, null] }
 

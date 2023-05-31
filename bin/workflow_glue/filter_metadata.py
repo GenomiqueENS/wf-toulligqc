@@ -78,8 +78,7 @@ order=["Read_count_histogram.html",
     "Yield_plot_through_time.html",
     "PHRED_score_distribution.html",
     "PHRED_score_density_distribution.html",
-    "Correlation_between_read_length_and_PHRED_score.html"
-    "1D²_Correlation_between_1D²_read_length_and_PHRED_score.html",
+    "Correlation_between_read_length_and_PHRED_score.html",
     "Channel_occupancy_of_the_flowcell.html",
     "Read_length_over_time.html",
     "PHRED_score_over_time.html",
@@ -87,12 +86,15 @@ order=["Read_count_histogram.html",
     "Tead_pass_barcode_distribution.html",
     "Tead_fail_barcode_distribution.html",
     "Tead_size_distribution_for_barcodes.html",
-    "PHRED_score_distribution_for_barcodes.html"]
+    "PHRED_score_distribution_for_barcodes.html",
+    "read_pass_barcode_distribution.html",
+    "read_fail_barcode_distribution.html",
+    "read_size_distribution_for_barcodes.html"]
 
 
 def find_index(lst, element):
     if element in lst:
-        return lst.index(element)
+        return lst.index(element)+1
     else:
         return False
 
@@ -116,7 +118,7 @@ def sort_figures(files, order=order):
         ftitle = fname.split('.')[0].replace('_', ' ')
         idx = find_index(order, fname) 
         if idx:  
-            figures[idx] = [f,ftitle]
+            figures[idx-1] = [f,ftitle]
         else: 
             figures[outIdx] = [f,ftitle]
             outIdx+=1
