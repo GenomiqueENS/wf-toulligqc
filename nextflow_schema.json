@@ -50,7 +50,6 @@
                     },
                 "barcodes": {
                     "type": "string",
-                    "format": "name",
                     "description": "Coma separated barcode list (e.g. BC05,RB09,NB01,barcode10)"
                 }
             },
@@ -66,7 +65,6 @@
             "properties": {
                 "report_name": {
                     "type": "string",
-                    "format": "name",
                     "description": "report_name.",
                     "help_text": "."
                 }
