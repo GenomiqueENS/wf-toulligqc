@@ -21,7 +21,7 @@
                 },
                 "barcoding_summary_pass": {
                     "type": "string",
-                    "format": "path",
+                    "format": "file",
                     "description": "Basecaller barcoding summary source of passed reads, can be compressed with gzip (.gz) or bzip2 (.bz2).",
                     "help_text": ""
                 },
