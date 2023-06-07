@@ -2,7 +2,7 @@ from dominate.tags import figure, div, section, h2
 from dominate.util import raw
 import locale
 from collections import defaultdict
-import datetime
+import plotly.graph_objects as go
 
 #str(datetime.timedelta(seconds = sec))
 
@@ -31,6 +31,23 @@ metadata = {'Overall statistics':[
     }
 
 
+order=["Read_count_histogram.html",
+    "Distribution_of_read_lengths.html",
+    "Yield_plot_through_time.html",
+    "PHRED_score_distribution.html",
+    "PHRED_score_density_distribution.html",
+    "Correlation_between_read_length_and_PHRED_score.html",
+    "Channel_occupancy_of_the_flowcell.html",
+    "Read_length_over_time.html",
+    "PHRED_score_over_time.html",
+    "Translocation_speed.html",
+    "Pass_barcoded_reads_distribution.html",
+    "Fail_barcoded_reads_distribution.html",
+    "Read_size_distribution_for_barcodes.html",
+    "PHRED_score_distribution_for_barcodes.html",
+    ]
+
+
 def defaultCount():
 	return 'Unknown'
 
@@ -50,46 +67,50 @@ def _format_run_time(seconds):
     return '%dh%02dm%02ds' % (seconds // 3600, (seconds % 3600) // 60, seconds % 60)
 
 
-def check_metadata(data, info, metadata=metadata):
+def read_data_file(data):
     dico = defaultdict(defaultCount)
-    sample_details = {}
+    with open(data,'r') as f:
+            for line in f:
+                (key, val) = line.split('=')
+                dico[key] = val
+    return dico
+
+
+def check_metadata(dataFile, metadata=metadata):
+    metadata_dict = {}
+    data = read_data_file(dataFile)
+    for section in metadata:
+        section_details = {}
+        for info in metadata[section]:
+            key = ' '.join(info.split('.')[3:]).capitalize()
+            val = data[info].strip()
+            if len(val) == 0:
+                section_details[key] = 'Unknown'
+            else :
+                if '50' in key:
+                    key = str(key.split(' ')[2]).capitalize()
+                    val = _format_int(int(val))
+                if 'yield' in key:
+                    key = str(key.split(' ')[2]).capitalize()
+                    val = _format_int_with_prefix(int(val))
+                if 'run time' in key:
+                    key = ' '.join(key.split(' ')[2:]).capitalize()
+                    val = _format_run_time(locale.atof(val))
+                section_details[key] = val
+        metadata_dict[section] = section_details
+    return metadata_dict
+
+
+def extract_metadata(data):
+    data_dict = {}
     with open(data,'r') as f:
         for line in f:
-            (key, val) = line.split('=')
-            dico[key] = val
-    for meta in metadata[info]:
-        key = ' '.join(meta.split('.')[3:]).capitalize()
-        val = dico[meta].strip()
-        if len(val) == 0:
-            sample_details[key] = 'Unknown'
-        else :
-            if '50' in key:
-                val = _format_int(int(val))
-            if 'yield' in key:
-                val = _format_int_with_prefix(int(val))
-            if 'run time' in key:
-                val = _format_run_time(locale.atof(val))
-            sample_details[key] = val
-    return sample_details
+            if line.startswith('basecaller.sequencing.summary.1d.'):
+                key, value = line.strip().split('=')
+                key = ' '.join(key.split('.')[5:]).capitalize()
+                data_dict[key] = float(value)
+    return data_dict
 
-
-order=["Read_count_histogram.html",
-    "Distribution_of_read_lengths.html",
-    "Yield_plot_through_time.html",
-    "PHRED_score_distribution.html",
-    "PHRED_score_density_distribution.html",
-    "Correlation_between_read_length_and_PHRED_score.html",
-    "Channel_occupancy_of_the_flowcell.html",
-    "Read_length_over_time.html",
-    "PHRED_score_over_time.html",
-    "Translocation_speed.html",
-    "Tead_pass_barcode_distribution.html",
-    "Tead_fail_barcode_distribution.html",
-    "Tead_size_distribution_for_barcodes.html",
-    "PHRED_score_distribution_for_barcodes.html",
-    "read_pass_barcode_distribution.html",
-    "read_fail_barcode_distribution.html",
-    "read_size_distribution_for_barcodes.html"]
 
 
 def find_index(lst, element):
@@ -200,7 +221,7 @@ def div_summary(titles):
     return html
 
 
-def add_qc(args):
+def add_qc(args, tables):
     figs = sort_figures(args)
     titles = [v[1] for v in figs.values()]
     with div(style="display: flex"):
@@ -213,3 +234,5 @@ def add_qc(args):
                 with figure(style="float: right"):
                     with section(id=str('M'+str(i))):
                         raw(html_contents)
+                        if f[1] in tables:
+                            raw(tables[f[1]])

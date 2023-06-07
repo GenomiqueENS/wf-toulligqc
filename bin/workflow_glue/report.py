@@ -7,6 +7,7 @@ from dominate.tags import div
 import pandas as pd
 from .util import get_named_logger, wf_parser 
 from .filter_metadata import check_metadata, add_qc
+from .create_tables import tables
 
 def main(args):
     """Run the entry point."""
@@ -17,27 +18,28 @@ def main(args):
 
     with report.add_section("Metadata", "Metadata"):
         tabs = Tabs()
+        metadata = check_metadata(args.metadata)
         with tabs.add_tab("Overall statistics"):
-            run_statistics = check_metadata(args.metadata, 'Overall statistics')
+            run_statistics = metadata['Overall statistics']
             df = pd.DataFrame.from_dict(run_statistics, orient="index", columns=["Value"])
             df.index.name = "Key"
             DataTable.from_pandas(df)
 
         with tabs.add_tab("Run metadata"):
-            run_statistics = check_metadata(args.metadata, 'Run metadata')
+            run_statistics = metadata['Run metadata']
             df = pd.DataFrame.from_dict(run_statistics, orient="index", columns=["Value"])
             df.index.name = "Key"
             DataTable.from_pandas(df)
 
         with tabs.add_tab("Device and software"):
-            device_info = check_metadata(args.metadata, "Device and software")
+            device_info = metadata["Device and software"]
             df = pd.DataFrame.from_dict(device_info, orient="index", columns=["Value"])
             df.index.name = "Key"
             DataTable.from_pandas(df)
 
     with report.add_section("QC report", "QC report"):
         #with div(style="overflow: auto; max-width: 100%"):
-                add_qc(args.qc)
+                add_qc(args.qc, tables(args.metadata))
 
     report.write(args.report)
     logger.info(f"Report written to {args.report}.")
