@@ -1,4 +1,4 @@
-# Workflow template
+# Workflow ToulligQC
 
 This repository contains a [nextflow](https://www.nextflow.io/) workflow
 template that can be used as the basis for creating new workflows.
