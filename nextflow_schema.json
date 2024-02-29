@@ -43,6 +43,18 @@
                     "description": "Fast5 file source (necessary if no telemetry file).",
                     "help_text": "Necessary if no telemetry file"
                 },
+                "fastq_source": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Fastq file source (necessary if no telemetry file).",
+                    "help_text": "Necessary if no telemetry file"
+                },
+                "bam_source": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Bam file source (necessary if no telemetry file).",
+                    "help_text": "Necessary if no telemetry file"
+                },
                 "barcoding": {
                     "type": "boolean",
                     "default": false,
