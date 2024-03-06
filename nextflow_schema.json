@@ -49,7 +49,7 @@
                     "description": "FASTQ file source (necessary if no telemetry file).",
                     "help_text": "Necessary if no telemetry file"
                 },
-                "BAM_source": {
+                "bam_source": {
                     "type": "string",
                     "format": "file-path",
                     "description": "BAM file source (necessary if no telemetry file).",
