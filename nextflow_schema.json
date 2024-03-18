@@ -70,7 +70,9 @@
                     "required": [
                         "sequencing_summary_source"
                     ]
-                },
+                }
+            ],
+            "oneOf": [
                 {
                     "required": [
                         "sequencing_summary_source"
@@ -78,7 +80,9 @@
                     "required": [
                         "telemetry_source"
                     ]
-                },
+                }
+            ],
+            "oneOf": [
                 {
                     "required": [
                         "telemetry_source"
@@ -86,7 +90,9 @@
                     "required": [
                         "fast5_source"
                     ]
-                },
+                }
+            ],
+            "oneOf": [
                 {
                     "required": [
                         "fastq"
