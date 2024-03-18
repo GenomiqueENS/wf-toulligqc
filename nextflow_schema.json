@@ -73,16 +73,10 @@
                 },
                 {
                     "required": [
-                        "sequencing_summary_source"
-                    ],
-                    "required": [
                         "telemetry_source"
                     ]
                 },
                 {
-                    "required": [
-                        "telemetry_source"
-                    ],
                     "required": [
                         "fast5_source"
                     ]
