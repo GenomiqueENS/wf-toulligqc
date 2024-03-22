@@ -154,7 +154,7 @@ workflow {
         Pinguscript.ping_post(workflow, "start", "none", params.out_dir, params)
     }
 
-    seq_summary = params.seq_summary != null ? file(params.seq_summary, type: "file") : file("no_seq_summary", type: "file")
+    seq_summary = params.sequencing_summary_source != null ? file(params.sequencing_summary_source, type: "file") : file("no_seq_summary", type: "file")
     summary_pass = params.barcoding_summary_pass != null ? file(params.barcoding_summary_pass, type: "file") : file("no_barcoding_pass", type: "file")
     summary_fail = params.barcoding_summary_fail != null ? file(params.barcoding_summary_fail, type: "file") : file("no_barcoding_fail", type: "file")
     seq_telemetry = params.telemetry_source != null ? file(params.telemetry_source, type: "file") : file("no_telemetry", type: "file")
