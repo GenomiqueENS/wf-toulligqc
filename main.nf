@@ -159,7 +159,7 @@ workflow {
     summary_fail = params.barcoding_summary_fail != null ? file(params.barcoding_summary_fail, type: "file") : file("no_barcoding_fail", type: "file")
     seq_telemetry = params.telemetry_source != null ? file(params.telemetry_source, type: "file") : file("no_telemetry", type: "file")
     fast5 = params.fast5_source != null ? file(params.fast5_source, type: "file") : file("no_fast5", type: "file")
-    fastq = params.fastq != null ? file(params.fastq, type: "file") : file("no_fastq", type: "file")
+    fastq = params.fastq_source != null ? file(params.fastq_source, type: "file") : file("no_fastq", type: "file")
     bam = params.bam != null ? file(params.bam, type: "file") : file("no_bam", type: "file")
     barcodes = params.barcodes != null ? params.barcodes : "no_barcodes"
     barcoding = params.barcoding
