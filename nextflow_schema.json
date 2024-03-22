@@ -64,34 +64,7 @@
                     "description": "BAM file source (necessary if no sequencing summary file).",
                     "help_text": "Necessary if no telemetry file"
                 }
-            },
-            "anyOf": [
-                {
-                    "required": [
-                        "sequencing_summary_source"
-                    ]
-                },
-                {
-                    "required": [
-                        "telemetry_source"
-                    ]
-                },
-                {
-                    "required": [
-                        "fast5_source"
-                    ]
-                },
-                {
-                    "required": [
-                        "fastq"
-                    ]
-                },
-                {
-                    "required": [
-                        "bam"
-                    ]
-                }
-            ]
+            }
         },
         "barcoding": {
             "title": "Barcoding Options",
