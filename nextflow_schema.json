@@ -13,22 +13,31 @@
             "fa_icon": "fas fa-arrow-right",
             "description": "Parameters for finding and handling input data for analysis.",
             "properties": {
+                "input_files": {
+                    "type": "string",
+                    "description": "Note that fastq/ bam only QC will result in some missing data and will significantly increase the running time",
+                    "enum": [
+                        "sequencing_summary only",
+                        "sequencing_summary + telemetry_source",
+                        "telemetry_source + fast5",
+                        "fastq/ bam only"
+                    ]
+                }
+            },
+            "required": [
+                "input_files"
+            ]
+        },
+        "samples": {
+            "title": "Sample Options",
+            "type": "object",
+            "fa_icon": "fas fa-vials",
+            "description": "Parameters that relate to input files for QC.",
+            "properties": {
                 "sequencing_summary_source": {
                     "type": "string",
                     "format": "file-path",
                     "description": "Basecaller sequencing summary source, can be compressed with gzip (.gz) or bzip2 (.bz2)",
-                    "help_text": ""
-                },
-                "barcoding_summary_pass": {
-                    "type": "string",
-                    "format": "file-path",
-                    "description": "Basecaller barcoding summary source of passed reads, can be compressed with gzip (.gz) or bzip2 (.bz2).",
-                    "help_text": ""
-                },
-                "barcoding_summary_fail": {
-                    "type": "string",
-                    "format": "file-path",
-                    "description": "Basecaller barcoding summary source of failed reads, can be compressed with gzip (.gz) or bzip2 (.bz2)",
                     "help_text": ""
                 },
                 "telemetry_source": {
@@ -54,31 +63,35 @@
                     "format": "file-path",
                     "description": "BAM file source (necessary if no sequencing summary file).",
                     "help_text": "Necessary if no telemetry file"
-                },
+                }
+            }
+        },
+        "barcoding": {
+            "title": "Barcoding Options",
+            "type": "object",
+            "fa_icon": "fas fa-arrow-left",
+            "description": "Parameters for barcoded samples ",
+            "properties": {
                 "barcoding": {
                     "type": "boolean",
                     "default": false,
                     "description": "Option for barcode usage."
-                    },
+                },
                 "barcodes": {
                     "type": "string",
                     "description": "Coma separated barcode list (e.g. BC05,RB09,NB01,barcode10)"
-                }
-            },
-            "required": [
-                "sequencing_summary_source"
-            ]
-        },
-        "samples": {
-            "title": "Sample Options",
-            "type": "object",
-            "fa_icon": "fas fa-vials",
-            "description": "Parameters that relate to samples such as sample sheets and sample names.",
-            "properties": {
-                "report_name": {
+                },
+                "barcoding_summary_pass": {
                     "type": "string",
-                    "description": "report_name.",
-                    "help_text": "."
+                    "format": "file-path",
+                    "description": "Basecaller barcoding summary source of passed reads, can be compressed with gzip (.gz) or bzip2 (.bz2).",
+                    "help_text": ""
+                },
+                "barcoding_summary_fail": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Basecaller barcoding summary source of failed reads, can be compressed with gzip (.gz) or bzip2 (.bz2)",
+                    "help_text": ""
                 }
             }
         },
@@ -99,17 +112,14 @@
         "advanced_options": {
             "title": "Advanced Options",
             "type": "object",
-            "fa_icon": "far fa-question-circle",
             "description": "Advanced options for configuring processes inside the workflow.",
             "help_text": "These advanced options do not need to be changed for typical use, but allow fine tuning of workflows for users who want more control over the workflow.",
-            "properties": {}
-        },
-        "misc": {
-            "title": "Miscellaneous Options",
-            "type": "object",
-            "description": "Everything else.",
-            "default": "",
             "properties": {
+                "report_name": {
+                    "type": "string",
+                    "description": "report_name.",
+                    "help_text": "."
+                },
                 "disable_ping": {
                     "type": "boolean",
                     "default": false,
@@ -142,9 +152,6 @@
         },
         {
             "$ref": "#/definitions/advanced_options"
-        },
-        {
-            "$ref": "#/definitions/misc"
         }
     ],
     "properties": {
