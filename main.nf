@@ -78,7 +78,6 @@ process toulligqc {
         path "$report_name/images/*.html", emit: plots_html
         path "$report_name/images/plotly.min.js", emit: plotly_js
     script:
-        def seq_summary_arg = seq_summary.name != 'no_seq_summary' ? "--sequencing-summary-source $seq_summary" : ""
         def summary_pass_arg = summary_pass.name != 'no_barcoding_pass' ? "--sequencing-summary-source $summary_pass" : ""
         def summary_fail_arg = summary_fail.name != 'no_barcoding_fail' ? "--sequencing-summary-source $summary_fail" : ""
         def telemetry_arg = seq_telemetry.name != 'no_telemetry' ? "--telemetry-source $seq_telemetry" : ""
@@ -88,7 +87,7 @@ process toulligqc {
         def barcodes_list = barcodes != 'no_barcodes' ? "--barcodes $barcodes" : ""
         def barcoding = barcoding != 'false' ? "--barcoding" : ""
     """
-    toulligqc $seq_summary_arg \
+    toulligqc --sequencing-summary-source ${seq_summary} \
     $summary_pass_arg  $summary_fail_arg \
     $telemetry_arg  \
     $fast5_arg $fastq_arg $bam_arg\
@@ -154,13 +153,13 @@ workflow {
         Pinguscript.ping_post(workflow, "start", "none", params.out_dir, params)
     }
 
-    seq_summary = params.sequencing_summary_source != null ? file(params.sequencing_summary_source, type: "file") : file("no_seq_summary", type: "file")
+    seq_summary = file(params.sequencing_summary_source, type: "file")
     summary_pass = params.barcoding_summary_pass != null ? file(params.barcoding_summary_pass, type: "file") : file("no_barcoding_pass", type: "file")
     summary_fail = params.barcoding_summary_fail != null ? file(params.barcoding_summary_fail, type: "file") : file("no_barcoding_fail", type: "file")
     seq_telemetry = params.telemetry_source != null ? file(params.telemetry_source, type: "file") : file("no_telemetry", type: "file")
     fast5 = params.fast5_source != null ? file(params.fast5_source, type: "file") : file("no_fast5", type: "file")
-    bam = params.bam != null ? file(params.bam, type: "file") : file("no_bam", type: "file")
     fastq = params.fastq_source != null ? file(params.fastq_source, type: "file") : file("no_fastq", type: "file")
+    bam = params.bam_source != null ? file(params.bam_source, type: "file") : file("no_bam", type: "file")
     barcodes = params.barcodes != null ? params.barcodes : "no_barcodes"
     barcoding = params.barcoding
     report_name = params.report_name
