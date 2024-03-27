@@ -49,22 +49,49 @@
                 "fast5_source": {
                     "type": "string",
                     "format": "file-path",
-                    "description": "Fast5 file source (necessary if no telemetry file).",
+                    "description": "Fast5 file source",
                     "help_text": "Necessary if no telemetry file"
                 },
                 "fastq_source": {
                     "type": "string",
                     "format": "file-path",
-                    "description": "FASTQ file source (necessary if no sequencing summary file).",
-                    "help_text": "Necessary if no telemetry file"
+                    "description": "FASTQ file source",
+                    "help_text": "Necessary if no sequencing summary file"
                 },
                 "bam_source": {
                     "type": "string",
                     "format": "file-path",
-                    "description": "BAM file source (necessary if no sequencing summary file).",
-                    "help_text": "Necessary if no telemetry file"
+                    "description": "BAM file source",
+                    "help_text": "Necessary if no sequencing summary file"
                 }
-            }
+            },
+            "anyOf": [
+                {
+                    "required": [
+                        "sequencing_summary_source"
+                    ]
+                },
+                {
+                    "required": [
+                        "telemetry_source"
+                    ]
+                },
+                {
+                    "required": [
+                        "fast5_source"
+                    ]
+                },
+                {
+                    "required": [
+                        "fastq_source"
+                    ]
+                },
+                {
+                    "required": [
+                        "bam_source"
+                    ]
+                }
+            ]
         },
         "barcoding": {
             "title": "Barcoding Options",
