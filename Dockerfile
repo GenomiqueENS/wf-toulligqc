@@ -11,7 +11,7 @@ RUN apt update && \
                     python3-h5py\
                     python3-matplotlib\
                     python3-scipy\
-                    python3-pandas\
+                    python3-pandas\ 
                     python3-numpy\
                     python3-tqdm\
                     python3-pysam\
