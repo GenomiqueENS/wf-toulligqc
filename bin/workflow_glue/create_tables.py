@@ -224,5 +224,7 @@ def _round2(num):
             if '.00' in num:
                 return "{:,d}".format(int(float(num)))
             else : return num
+        elif num == 'nan':
+            return 0.0
         else:
             return "{:,d}".format(int(num))
