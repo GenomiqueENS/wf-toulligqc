@@ -86,13 +86,13 @@ process toulligqc {
         def bam_arg = bam.name != 'no_bam' ? "--bam $bam" : ""
         def fastq_arg = fastq.name != 'no_fastq' ? "--fastq $fastq" : ""
         def barcodes_list = barcodes != 'no_barcodes' ? "--barcodes $barcodes" : ""
-        def barcoding = barcoding != 'false' ? "--barcoding" : ""
+        def barcoding_arg = barcoding != 'no_barcoding' ? "--barcoding" : ""
     """
     toulligqc $seq_summary_arg \
     $summary_pass_arg  $summary_fail_arg \
     $telemetry_arg  \
     $fast5_arg $fastq_arg $bam_arg\
-    $barcoding  $barcodes_list \
+    $barcoding_arg  $barcodes_list \
     -n $report_name \
     --force 
     """
@@ -162,7 +162,7 @@ workflow {
     fastq = params.fastq_source != null ? file(params.fastq_source, type: "file") : file("no_fastq", type: "file")
     bam = params.bam_source != null ? file(params.bam_source, type: "file") : file("no_bam", type: "file")
     barcodes = params.barcodes != null ? params.barcodes : "no_barcodes"
-    barcoding = params.barcoding
+    barcoding = params.barcoding != false ? params.barcoding : "no_barcoding"
     report_name = params.report_name
 
     pipeline(seq_summary, summary_pass, summary_fail, seq_telemetry, fast5, fastq, bam, report_name, barcodes, barcoding)
@@ -181,3 +181,4 @@ if (params.disable_ping == false) {
         Pinguscript.ping_post(workflow, "error", "$workflow.errorMessage", params.out_dir, params)
     }
 }
+
