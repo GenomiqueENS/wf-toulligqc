@@ -93,9 +93,9 @@ def check_metadata(dataFile, metadata=metadata):
                 if 'yield' in key:
                     key = str(key.split(' ')[2]).capitalize()
                     val = _format_int_with_prefix(int(val))
-                if 'run time' in key:
+                if 'run time' in key: 
                     key = ' '.join(key.split(' ')[2:]).capitalize()
-                    val = _format_run_time(locale.atof(val))
+                    val = _format_run_time(locale.atof(val)) if val != 'Unknown' else 'Unknown'
                 section_details[key] = val
         metadata_dict[section] = section_details
     return metadata_dict
