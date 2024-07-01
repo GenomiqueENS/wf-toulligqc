@@ -3,7 +3,7 @@
     "$id": "https://raw.githubusercontent.com/./master/nextflow_schema.json",
     "title": "genomiqueens/wf-toulligqc",
     "description": "Nextflow workflow template repository.",
-    "demo_url": "https://ont-exd-int-s3-euwst1-epi2me-labs.s3.amazonaws.com/wf-template/wf-template-demo.tar.gz",
+    "demo_url": "https://github.com/GenomiqueENS/wf-toulligqc/raw/new_design/demo_data/wf-toulligqc-demo.tar.gz",
     "url": "https://github.com/GenomiqueENS/wf-toulligqc",
     "type": "object",
     "definitions": {
