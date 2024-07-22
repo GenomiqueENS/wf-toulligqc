@@ -4,6 +4,7 @@
     "title": "genomiqueens/wf-toulligqc",
     "description": "Nextflow workflow template repository.",
     "demo_url": "https://github.com/GenomiqueENS/wf-toulligqc/raw/new_design/demo_data/wf-toulligqc-demo.tar.gz",
+    "aws_demo_url": "https://github.com/GenomiqueENS/wf-toulligqc/raw/new_design/demo_data/demo.nextflow.config",
     "url": "https://github.com/GenomiqueENS/wf-toulligqc",
     "type": "object",
     "definitions": {
@@ -21,7 +22,8 @@
                         "sequencing_summary + telemetry_source",
                         "telemetry_source + fast5",
                         "fastq/ bam only"
-                    ]
+                    ],
+                    "default":  "sequencing_summary only"
                 }
             },
             "required": [
@@ -38,13 +40,15 @@
                     "type": "string",
                     "format": "file-path",
                     "description": "Basecaller sequencing summary source, can be compressed with gzip (.gz) or bzip2 (.bz2)",
-                    "help_text": ""
+                    "help_text": "",
+                    "demo_data": "demo_data/sequencing_summary.txt"
                 },
                 "telemetry_source": {
                     "type": "string",
                     "format": "file-path",
                     "description": "Basecaller telemetry file source, can be compressed with gzip (.gz) or bzip2 (.bz2)",
-                    "help_text": ""
+                    "help_text": "",
+                    "demo_data": "${projectDir}/demo_data/sequencing_telemetry.js"
                 },
                 "fast5_source": {
                     "type": "string",
