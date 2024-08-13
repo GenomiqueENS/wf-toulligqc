@@ -13,7 +13,7 @@ def main(args):
     """Run the entry point."""
     logger = get_named_logger("Report")
     report = labs.LabsReport(
-        "Workflow QC report", "wf-QC",
+        "Workflow ToulligQC report", "wf-ToulliQC",
         args.params, args.versions)
 
     with report.add_section("Metadata", "Metadata"):
