@@ -115,7 +115,7 @@ Find related protocols in the [Nanopore community](https://community.nanoporetec
 
 ## Useful links
 
-* [toulligqc] (https://github.com/GenomiqueENS/toulligQC)
+* [toulligqc](https://github.com/GenomiqueENS/toulligQC)
 * [nextflow](https://www.nextflow.io/)
 * [docker](https://www.docker.com/products/docker-desktop)
 * [singularity](https://docs.sylabs.io/guides/latest/user-guide/)
