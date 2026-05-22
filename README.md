@@ -30,7 +30,7 @@ These are instructions to install and run the workflow on command line. You can 
 The workflow uses [Nextflow](https://www.nextflow.io/) to manage compute and software resources, therefore Nextflow will need to be installed before attempting to run the workflow.
 
 The workflow can currently be run using either
-[Docker](https://www.docker.com/products/docker-desktop
+[Docker](https://www.docker.com/products/docker-desktop)
 or [Singularity](https://docs.sylabs.io/guides/3.0/user-guide/index.html)
 to provide isolation of the required software. Both methods are automated out-of-the-box provided either Docker or Singularity is installed.
 This is controlled by the [`-profile`](https://www.nextflow.io/docs/latest/config.html#config-profiles) parameter as exemplified below.
