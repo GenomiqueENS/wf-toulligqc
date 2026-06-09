@@ -2,6 +2,11 @@
 
 A post sequencing QC tool for Oxford Nanopore sequencers 
 
+
+**WARNING**: The support of wf-toulligqc is discontinued as a bug in Epi2me 5.4 (_README.md_ file not found) that fails to load the wf-toulligqc workflow.
+ToulligQC command line version is still supported on [its GitHub page](https://github.com/GenomiqueENS/toulligqc).
+
+
 ## Introduction
 
 This workflow is dedicated to the QC analyses of Oxford Nanopore runs, and it is adapted to RNA-Seq along with DNA-Seq.
